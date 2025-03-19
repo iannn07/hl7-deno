@@ -22,8 +22,6 @@ export type Study = {
   cito: boolean
   examination: string
   status: string
-  imageCount: number
-  patientAge: string
 }
 
 export type Patient = {

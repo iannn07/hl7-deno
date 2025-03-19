@@ -125,12 +125,6 @@ function mapHL7ToDBSchema(
   const birthDate = pid7
     ? parseHL7DateTime(pid7.padEnd(14, '0')) // naive
     : '' // or fallback
-  const patientAge = birthDate
-    ? Math.floor(
-        (new Date().getTime() - new Date(birthDate).getTime()) /
-          (365.25 * 24 * 60 * 60 * 1000)
-      ).toString()
-    : ''
 
   // TQ1 => if "STAT" => cito is true, else false
   const cito = parseCito(tq1)
@@ -158,9 +152,7 @@ function mapHL7ToDBSchema(
     name: examName,
     cito,
     examination: examCode,
-    status: orderStatus, // for example, or dynamically set from ORC
-    imageCount: 0,
-    patientAge: patientAge ? patientAge : '', // if you have a place for it, from PID.7 or other
+    status: orderStatus,
   }
 
   const patient: Patient = {
