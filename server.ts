@@ -138,7 +138,7 @@ function mapHL7ToDBSchema(
   const imagingStudy: ImagingStudy = {
     id: crypto.randomUUID(),
     started,
-    status: accessionNumber ? 'Available' : 'Not available',
+    status: accessionNumber ? 'Available' : 'Unscheduled',
     modality: examCode || '',
     numberOfSeries: 0,
     numberOfInstances: 0,
@@ -186,6 +186,12 @@ Deno.serve({ port: 8080 }, async (req: Request) => {
 
       // Map HL7 to DB schema
       const dbObject = mapHL7ToDBSchema(segments)
+
+      // Check existing data in supabase
+
+      // If the patient exists, stand still and go away bro
+
+      // If the patient does not exist, create a new patient
 
       // Return JSON result
       return new Response(JSON.stringify(dbObject, null, 2), {
