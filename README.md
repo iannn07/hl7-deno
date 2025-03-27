@@ -12,36 +12,36 @@ This application is a Deno-based HTTP server that processes HL7 messages, parses
 
 ## Installation
 
-# Clone the repository
+### Clone the repository
+```
 git clone https://github.com/yourusername/hl7-parser.git
 cd hl7-parser
-
-# Install Deno if not already installed
-# Windows (PowerShell)
+```
+### Install Deno if not already installed
+Windows (PowerShell)
+```
 iwr -useb https://deno.land/x/install/install.ps1 | iex
+```
 
-# Configure environment variables (create a .env file)
-# Set your Supabase URL and API key
-
-## Usage
+### Usage
 
 ### Running the Application
-
+```
 deno run --allow-net --allow-read --allow-write --watch server.ts
-
+```
 The server operates on http://localhost:8000/ by default and accepts HL7 messages via POST to the `/hl7` endpoint.
 
 ### Sending an HL7 Message
-
+```
 curl -X POST http://localhost:8000/hl7 \
   -H "Content-Type: text/plain" \
   -d "MSH|^~\&|SENDING_APP|SENDING_FACILITY|RECEIVING_APP|RECEIVING_FACILITY|20240601123045||ADT^A01|MSG00001|P|2.3
 PID|1||MRN12345^^^HOSPITAL^MR||DOE^JOHN^||19800101|M|||123 MAIN ST^^ANYTOWN^NY^10001||(555)555-5555||S||MRN12345||||12345678"
-
+```
 ## Data Structure
 
 The parser extracts data into the following database tables:
-
+```
 ### 1. ris_patient
 - Patient demographics and identifiers
 - Unique identification by MRN
@@ -53,11 +53,11 @@ The parser extracts data into the following database tables:
 ### 3. ris_imaging_study
 - Imaging-specific information
 - Links to study records via studyID
-
+```
 ## Sample Output
 
 The application logs operations to the console:
-
+```
 ### Patient Processing
 Checking if patient patient-123456 exists...
 Patient exists check result: [
@@ -115,13 +115,13 @@ Imaging study inserted successfully: [
     studyID: "study-ABC123"
   }
 ]
-
+```
 ## Resource Utilization
 
 When running the server, the system resources consumed were measured using PowerShell:
-
+```
 Get-Process -Name deno | Format-Table Id, CPU, @{Name='Memory(MB)';Expression={[math]::Round($_.WorkingSet/1MB, 2)}}, Handles
-
+```
 ### Results
 
 | Process ID | CPU (seconds) | Memory (MB) | Handles |
@@ -154,13 +154,15 @@ Get-Process -Name deno | Format-Table Id, CPU, @{Name='Memory(MB)';Expression={[
 
 To monitor the application's resource usage in production:
 
-# One-time snapshot
+### One-time snapshot
 Get-Process -Name deno | Format-Table Id, CPU, @{Name='Memory(MB)';Expression={[math]::Round($_.WorkingSet/1MB, 2)}}, Handles
 
-# Continuous monitoring (every 5 seconds)
+### Continuous monitoring (every 5 seconds)
+```
 while($true) {
   Get-Process -Name deno | Format-Table Id, @{Name='CPU(s)';Expression={[math]::Round($_.CPU, 2)}}, @{Name='Memory(MB)';Expression={[math]::Round($_.WorkingSet/1MB, 2)}}, Handles -AutoSize
   Write-Host ("Timestamp: {0}" -f (Get-Date -Format "HH:mm:ss"))
   Write-Host ("--------------------------------------")
   Start-Sleep -Seconds 5
 }
+```
